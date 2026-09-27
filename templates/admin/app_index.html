@@ -1,0 +1,28 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}" {% csp_nonce_attr %}>{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard app-{{ app_label }}{% endblock %}
+
+{% if not is_popup %}
+{% block nav-breadcrumbs %}
+  <nav aria-label="{% translate 'Breadcrumbs' %}">
+    <ol class="breadcrumbs">
+      <li><a href="{% url 'admin:index' %}">{% translate 'Home' %}</a></li>
+      <li aria-current="page">
+      {% for app in app_list %}{{ app.name }}
+      {% endfor %}
+      </li>
+    </ol>
+  </nav>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div id="content-main" class="app-list dashboard-apps">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

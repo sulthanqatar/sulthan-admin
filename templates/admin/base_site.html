@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Sulthan Admin') }}{% endblock %}
+
+{% block branding %}
+<a class="brand-lockup" href="{% url 'admin:index' %}">
+  <span class="brand-mark" aria-hidden="true">S</span>
+  <span class="brand-copy">
+    <span class="brand-name">{{ brand_name|default:_('Sulthan') }}</span>
+    <span class="brand-tag">{{ brand_tagline|default:_('Admin') }}</span>
+  </span>
+</a>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

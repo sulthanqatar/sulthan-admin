@@ -1,0 +1,17 @@
+{% load i18n %}
+<nav class="sticky" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
+  <a class="brand-lockup sidebar-lockup" href="{% url 'admin:index' %}">
+    <span class="brand-mark" aria-hidden="true">S</span>
+    <span class="brand-copy">
+      <span class="brand-name">{{ brand_name|default:_('Sulthan') }}</span>
+      <span class="brand-tag">{{ brand_tagline|default:_('Admin') }}</span>
+    </span>
+  </a>
+  <div class="sidebar-search">
+    <input type="search" id="nav-filter"
+           placeholder="{% translate 'Filter menu…' %}"
+           aria-label="{% translate 'Filter navigation items' %}">
+  </div>
+  <a class="sidebar-home" href="{% url 'admin:index' %}">{% translate 'Overview' %}</a>
+  {% include 'admin/app_list.html' with app_list=available_apps show_changelinks=False %}
+</nav>
