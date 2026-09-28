@@ -10,22 +10,53 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
+import shutil
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Vercel sets VERCEL=1 on both build and runtime.
+ON_VERCEL = os.environ.get("VERCEL") == "1"
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b^vj6he0egu!ui#jmpa*24j3fscl9g$v(47!s0ifl&xb*m^o!2'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-b^vj6he0egu!ui#jmpa*24j3fscl9g$v(47!s0ifl&xb*m^o!2",
+)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Local runserver stays in debug. Vercel deployments do not.
+DEBUG = not ON_VERCEL
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".vercel.app",
+]
+ALLOWED_HOSTS += [
+    host.strip()
+    for host in os.environ.get("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
+
+# Admin login posts from these origins. The wildcard covers preview URLs.
+CSRF_TRUSTED_ORIGINS = ["https://*.vercel.app"]
+CSRF_TRUSTED_ORIGINS += [
+    origin.strip()
+    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
+if ON_VERCEL:
+    # Vercel terminates TLS and forwards the original scheme.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Application definition
@@ -72,10 +103,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# Vercel's deployment filesystem is read-only. Copy SQLite to /tmp so
+# admin login can write a session. That copy lasts for the function instance.
+SQLITE_PATH = BASE_DIR / "db.sqlite3"
+if ON_VERCEL and SQLITE_PATH.exists():
+    runtime_db = Path("/tmp/db.sqlite3")
+    if not runtime_db.exists():
+        shutil.copy2(SQLITE_PATH, runtime_db)
+    SQLITE_PATH = runtime_db
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': SQLITE_PATH,
     }
 }
 
@@ -116,6 +156,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+# Vercel runs collectstatic when this is set and serves the result from its CDN.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Email
