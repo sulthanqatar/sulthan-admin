@@ -34,9 +34,11 @@ SECRET_KEY = os.environ.get(
 DEBUG = not ON_VERCEL
 
 ALLOWED_HOSTS = [
+    "*",
+    "sulthan-admin-wqpg.vercel.app",
+    ".vercel.app",
     "localhost",
     "127.0.0.1",
-    ".vercel.app",
 ]
 ALLOWED_HOSTS += [
     host.strip()
