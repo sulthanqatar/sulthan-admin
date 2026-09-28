@@ -1497,6 +1497,10 @@ body.login #content-main {
   float: none !important;
 }
 
+body.login #content-main.login-panel {
+  padding: 40px 36px !important;
+}
+
 body.login #content-start {
   display: flex;
   align-items: center;
@@ -1506,12 +1510,12 @@ body.login #content-start {
 }
 
 .login-panel {
-  width: min(420px, 100%);
+  width: min(440px, 100%);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-  padding: var(--space-8) var(--space-6);
+  padding: 40px 36px;
 }
 
 .login-kicker {
@@ -1550,10 +1554,15 @@ body.login label {
 }
 
 body.login input[type="text"],
-body.login input[type="password"] {
+body.login input[type="password"],
+body.login .form-row #id_username,
+body.login .form-row #id_password {
   width: 100% !important;
-  height: 40px !important;
-  min-height: 40px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding-block: 10px !important;
+  padding-inline: 16px !important;
+  box-sizing: border-box !important;
 }
 
 body.login .submit-row {
