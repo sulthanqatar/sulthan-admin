@@ -59,11 +59,27 @@ a { color: var(--accent-text); }
 
 .brand {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px 22px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px 22px;
   color: #fff;
   text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  width: 168px;
+  max-width: 100%;
+  height: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+
+.login-logo {
+  width: min(280px, 100%);
+  margin: 0 0 16px;
 }
 
 .brand strong { display: block; font-size: 14px; }
@@ -101,6 +117,52 @@ a { color: var(--accent-text); }
 }
 
 .workspace { flex: 1; min-width: 0; }
+
+/* Store admin: white logo band, same height as the top bar, full sidebar width. */
+.panel-shell {
+  --panel-header: 88px;
+}
+
+.panel-shell > .sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 20px;
+}
+
+.panel-shell .brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--panel-header);
+  margin: 0 0 16px;
+  padding: 10px 18px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.panel-shell .brand-logo {
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.panel-shell .sidebar nav {
+  padding: 0 12px;
+}
+
+.panel-shell .topbar {
+  height: var(--panel-header);
+  min-height: var(--panel-header);
+  padding: 0 28px;
+  box-sizing: border-box;
+}
 
 .topbar {
   display: flex;
@@ -222,15 +284,36 @@ td {
 }
 
 tr:hover td { background: var(--surface-muted); }
+.click-row { cursor: pointer; }
+.click-row:hover td,
+.click-row:focus-visible td { background: var(--aqua-tint); }
 
-.actions, .inline-form {
+.inline-form {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
 
-.actions form { margin: 0; }
+/* Keep action cells as table cells so row borders stay continuous.
+   Flex on the td itself drops it out of the table and splits the line. */
+td.actions {
+  white-space: nowrap;
+}
+
+td.actions > form,
+td.actions > a,
+td.actions > button,
+td.actions > span {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0;
+}
+
+td.actions > * + * {
+  margin-left: 8px;
+}
 
 .btn {
   display: inline-flex;
@@ -262,6 +345,12 @@ tr:hover td { background: var(--surface-muted); }
   color: var(--text-secondary);
 }
 .btn-block { width: 100%; }
+.btn-sm {
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
 
 .chip {
   display: inline-flex;
@@ -440,6 +529,8 @@ input:focus {
 @media (max-width: 900px) {
   .shell { display: block; }
   .sidebar { width: auto; flex: none; position: static; max-height: none; padding-bottom: 12px; }
+  .panel-shell .brand,
+  .panel-shell .topbar { height: auto; min-height: var(--panel-header); }
   .stat-row.stats-4 { grid-template-columns: 1fr; }
   .sidebar nav { flex-direction: row; flex-wrap: wrap; }
   .login-layout { grid-template-columns: 1fr; }

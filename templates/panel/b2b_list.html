@@ -12,27 +12,26 @@
           <th>Email</th>
           <th>Phone</th>
           <th>Status</th>
-          <th>Update</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         {% for item in registrations %}
-          <tr>
-            <td><a class="row-link" href="{% url 'panel:b2b_detail' item.pk %}"><strong>{{ item.company }}</strong></a></td>
+          <tr class="click-row" data-href="{% url 'panel:b2b_detail' item.pk %}" tabindex="0">
+            <td><strong>{{ item.company }}</strong></td>
             <td>{{ item.contact_name }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.phone|default:"—" }}</td>
             <td><span class="chip chip-{{ item.status }}">{{ item.get_status_display }}</span></td>
             <td class="actions">
-              <a class="btn" href="{% url 'panel:b2b_detail' item.pk %}">View</a>
               {% if item.status == "pending" %}
                 <form method="post" action="{% url 'panel:b2b_status' item.pk %}">
                   {% csrf_token %}
-                  <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+                  <button class="btn btn-primary btn-sm" name="status" value="accepted" type="submit">Accept</button>
                 </form>
                 <form method="post" action="{% url 'panel:b2b_status' item.pk %}">
                   {% csrf_token %}
-                  <button class="btn btn-danger" name="status" value="cancelled" type="submit">Cancel</button>
+                  <button class="btn btn-danger btn-sm" name="status" value="cancelled" type="submit">Cancel</button>
                 </form>
               {% endif %}
             </td>
@@ -43,4 +42,16 @@
       </tbody>
     </table>
   </div>
+  <script>
+    document.querySelectorAll(".click-row").forEach((row) => {
+      const open = () => { window.location.href = row.dataset.href; };
+      row.addEventListener("click", (event) => {
+        if (event.target.closest("button, form")) return;
+        open();
+      });
+      row.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.target.closest("button, form")) open();
+      });
+    });
+  </script>
 {% endblock %}

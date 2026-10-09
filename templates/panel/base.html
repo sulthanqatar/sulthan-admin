@@ -8,17 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=4">
+  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=8">
 </head>
 <body>
-  <div class="shell">
+  <div class="shell panel-shell">
     <aside class="sidebar">
       <a class="brand" href="{% url 'panel:dashboard' %}">
-        <span class="brand-mark">S</span>
-        <span>
-          <strong>Sulthan</strong>
-          <small>Admin</small>
-        </span>
+        <img class="brand-logo" src="{% static 'portals/sultan-logo.png' %}" alt="Sultan">
       </a>
       <nav>
         <a href="{% url 'panel:dashboard' %}" class="{% if section == 'dashboard' %}is-active{% endif %}">Dashboard</a>

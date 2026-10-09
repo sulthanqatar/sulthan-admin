@@ -8,17 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=3">
+  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=5">
 </head>
 <body>
   <div class="shell">
     <aside class="sidebar">
       <a class="brand" href="/{{ role }}/">
-        <span class="brand-mark">S</span>
-        <span>
-          <strong>Sulthan</strong>
-          <small>{{ portal.title }}</small>
-        </span>
+        <img class="brand-logo" src="{% static 'portals/sultan-logo.png' %}" alt="Sultan">
+        <small>{{ portal.title }}</small>
       </a>
       <nav>
         {% if role == "staff" %}

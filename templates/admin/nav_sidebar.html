@@ -1,11 +1,8 @@
-{% load i18n %}
+{% load i18n static %}
 <nav class="sticky" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
   <a class="brand-lockup sidebar-lockup" href="{% url 'admin:index' %}">
-    <span class="brand-mark" aria-hidden="true">S</span>
-    <span class="brand-copy">
-      <span class="brand-name">{{ brand_name|default:_('Sulthan') }}</span>
-      <span class="brand-tag">{{ brand_tagline|default:_('Superadmin') }}</span>
-    </span>
+    <img class="brand-logo" src="{% static 'portals/sultan-logo.png' %}" alt="Sultan">
+    <span class="brand-tag">{{ brand_tagline|default:_('Superadmin') }}</span>
   </a>
   <div class="sidebar-search">
     <input type="search" id="nav-filter"

@@ -39,11 +39,11 @@
               {% if order.status == "new" %}
                 <form method="post" action="{% url 'panel:order_status' order.pk %}">
                   {% csrf_token %}
-                  <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+                  <button class="btn btn-primary btn-sm" name="status" value="accepted" type="submit">Accept</button>
                 </form>
                 <form method="post" action="{% url 'panel:order_status' order.pk %}">
                   {% csrf_token %}
-                  <button class="btn btn-danger" name="status" value="cancelled" type="submit">Cancel</button>
+                  <button class="btn btn-danger btn-sm" name="status" value="cancelled" type="submit">Cancel</button>
                 </form>
               {% else %}
                 <span class="quiet">No further change</span>
