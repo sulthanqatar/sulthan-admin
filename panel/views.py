@@ -366,12 +366,28 @@ def user_toggle(request, pk):
     return redirect("panel:users")
 
 
+def _b2b_return(request, pk):
+    if request.POST.get("next") == "detail":
+        return redirect("panel:b2b_detail", pk=pk)
+    return redirect("panel:b2b")
+
+
 @admin_required
 def b2b_list(request):
     return render(
         request,
         "panel/b2b_list.html",
         {"section": "b2b", "registrations": B2BRegistration.objects.order_by("-created_at")},
+    )
+
+
+@admin_required
+def b2b_detail(request, pk):
+    registration = get_object_or_404(B2BRegistration, pk=pk)
+    return render(
+        request,
+        "panel/b2b_detail.html",
+        {"section": "b2b", "heading": registration.company, "registration": registration},
     )
 
 
@@ -383,13 +399,13 @@ def b2b_status(request, pk):
     allowed = {B2BRegistration.STATUS_ACCEPTED, B2BRegistration.STATUS_CANCELLED}
     if registration.status != B2BRegistration.STATUS_PENDING or status not in allowed:
         messages.error(request, "Only a pending registration can be accepted or cancelled.")
-        return redirect("panel:b2b")
+        return _b2b_return(request, pk)
     registration.status = status
     registration.save(update_fields=["status"])
     label = "Accepted" if status == B2BRegistration.STATUS_ACCEPTED else "Cancelled"
     audit(request, f"{label} B2B registration", f"B2B: {registration.company}")
     messages.success(request, f"{registration.company} {label.lower()}.")
-    return redirect("panel:b2b")
+    return _b2b_return(request, pk)
 
 
 @admin_required

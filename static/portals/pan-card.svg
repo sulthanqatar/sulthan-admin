@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Sample PAN card">
+  <rect width="640" height="400" rx="24" fill="#201C46"/>
+  <rect x="24" y="24" width="592" height="352" rx="16" fill="#F8FAFC"/>
+  <rect x="24" y="24" width="592" height="64" rx="16" fill="#40C1AC"/>
+  <rect x="24" y="64" width="592" height="24" fill="#40C1AC"/>
+  <text x="48" y="66" fill="#201C46" font-family="Roboto, Arial, sans-serif" font-size="22" font-weight="700">INCOME TAX DEPARTMENT</text>
+  <text x="430" y="66" fill="#201C46" font-family="Roboto, Arial, sans-serif" font-size="22" font-weight="700">SAMPLE</text>
+  <rect x="48" y="116" width="120" height="140" rx="8" fill="#E2E8F0"/>
+  <circle cx="108" cy="164" r="28" fill="#CBD5E1"/>
+  <rect x="72" y="206" width="72" height="28" rx="14" fill="#CBD5E1"/>
+  <text x="192" y="140" fill="#4A5568" font-family="Roboto, Arial, sans-serif" font-size="14">Permanent account number</text>
+  <text x="192" y="176" fill="#201C46" font-family="Roboto, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="2">ABCDE1234F</text>
+  <text x="192" y="214" fill="#4A5568" font-family="Roboto, Arial, sans-serif" font-size="14">Name</text>
+  <text x="192" y="240" fill="#201C46" font-family="Roboto, Arial, sans-serif" font-size="20" font-weight="700">Sample applicant</text>
+  <text x="48" y="304" fill="#4A5568" font-family="Roboto, Arial, sans-serif" font-size="14">Dummy document for review. Not a real PAN card.</text>
+  <text x="48" y="344" fill="#1A7F6E" font-family="Roboto, Arial, sans-serif" font-size="16" font-weight="700">PAN CARD</text>
+</svg>

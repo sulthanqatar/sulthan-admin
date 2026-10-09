@@ -27,6 +27,7 @@ urlpatterns = [
     path("users/<int:pk>/", views.user_edit, name="user_edit"),
     path("users/<int:pk>/toggle/", views.user_toggle, name="user_toggle"),
     path("b2b/", views.b2b_list, name="b2b"),
+    path("b2b/<int:pk>/", views.b2b_detail, name="b2b_detail"),
     path("b2b/<int:pk>/status/", views.b2b_status, name="b2b_status"),
     path("banners/", views.banner_list, name="banners"),
     path("banners/new/", views.banner_edit, name="banner_new"),

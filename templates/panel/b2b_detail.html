@@ -1,0 +1,57 @@
+{% extends "panel/base.html" %}
+{% load static %}
+{% block title %}{{ registration.company }}{% endblock %}
+{% block heading %}{{ registration.company }}{% endblock %}
+{% block content %}
+  <p class="lede"><a href="{% url 'panel:b2b' %}">Back to reviews</a></p>
+  <section class="card">
+    <header class="card-head">
+      <h2>Registration</h2>
+      <span class="chip chip-{{ registration.status }}">{{ registration.get_status_display }}</span>
+    </header>
+    <dl class="detail-grid">
+      <dt>Company</dt>
+      <dd>{{ registration.company }}</dd>
+      <dt>Contact</dt>
+      <dd>{{ registration.contact_name }}</dd>
+      <dt>Email</dt>
+      <dd>{{ registration.email }}</dd>
+      <dt>Phone</dt>
+      <dd>{{ registration.phone|default:"—" }}</dd>
+      <dt>Submitted</dt>
+      <dd>{{ registration.created_at|date:"M j, Y H:i" }}</dd>
+    </dl>
+    {% if registration.status == "pending" %}
+      <div class="form-actions detail-actions">
+        <form method="post" action="{% url 'panel:b2b_status' registration.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="detail">
+          <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+        </form>
+        <form method="post" action="{% url 'panel:b2b_status' registration.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="detail">
+          <button class="btn btn-danger" name="status" value="cancelled" type="submit">Cancel</button>
+        </form>
+      </div>
+    {% endif %}
+  </section>
+  <section class="card">
+    <header class="card-head">
+      <div>
+        <h2>Uploaded documents</h2>
+        <p class="quiet">Sample files stand in until a registration uploads a PAN card or other documents.</p>
+      </div>
+    </header>
+    <div class="doc-grid">
+      <figure class="doc-card">
+        <img src="{% static 'portals/pan-card.svg' %}" alt="Sample PAN card">
+        <figcaption>PAN card</figcaption>
+      </figure>
+      <figure class="doc-card">
+        <img src="{% static 'portals/trade-licence.svg' %}" alt="Sample trade licence">
+        <figcaption>Trade licence</figcaption>
+      </figure>
+    </div>
+  </section>
+{% endblock %}
