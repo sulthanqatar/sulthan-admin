@@ -5,8 +5,8 @@ from django.contrib.auth.models import Group, User
 
 
 class StudioAdminSite(admin.AdminSite):
-    site_header = "Sulthan Admin"
-    site_title = "Sulthan Admin"
+    site_header = "Sulthan Superadmin"
+    site_title = "Sulthan Superadmin"
     index_title = "Overview"
     site_url = "/"
     enable_nav_sidebar = True
@@ -14,7 +14,7 @@ class StudioAdminSite(admin.AdminSite):
     def each_context(self, request):
         context = super().each_context(request)
         context["brand_name"] = "Sulthan"
-        context["brand_tagline"] = "Admin"
+        context["brand_tagline"] = "Superadmin"
         return context
 
     def index(self, request, extra_context=None):
@@ -47,8 +47,8 @@ class StudioUserAdmin(DjangoUserAdmin):
 
 def patch_admin():
     admin.site.__class__ = StudioAdminSite
-    admin.site.site_header = "Sulthan Admin"
-    admin.site.site_title = "Sulthan Admin"
+    admin.site.site_header = "Sulthan Superadmin"
+    admin.site.site_title = "Sulthan Superadmin"
     admin.site.index_title = "Overview"
     if admin.site.is_registered(User):
         admin.site.unregister(User)

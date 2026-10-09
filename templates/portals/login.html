@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in | {{ portal.title }} | Sulthan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=3">
+</head>
+<body class="login-body">
+  <div class="login-layout">
+    <section class="login-hero">
+      <div>
+        <p class="login-wordmark">{{ portal.title }}</p>
+        <h1>Sulthan</h1>
+        <p>{{ portal.lede }}</p>
+      </div>
+    </section>
+    <section class="login-stage">
+      <form class="login-card" method="post">
+        {% csrf_token %}
+        <p class="kicker">Welcome</p>
+        <h2>Sign in</h2>
+        <p class="sub">Use the demo credentials to open {{ portal.title|lower }}.</p>
+        {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required value="admin">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        <p class="demo-hint">Demo sign-in: admin / admin@123</p>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

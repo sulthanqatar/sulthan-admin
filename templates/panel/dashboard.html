@@ -1,0 +1,59 @@
+{% extends "panel/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+  <p class="lede">Store snapshot for the admin desk.</p>
+  <div class="stat-row stats-4">
+    <article>
+      <span>Total order count</span>
+      <strong>{{ order_count }}</strong>
+    </article>
+    <article>
+      <span>Total customers</span>
+      <strong>{{ customer_count }}</strong>
+    </article>
+    <article>
+      <span>B2B customers</span>
+      <strong>{{ b2b_count }}</strong>
+    </article>
+    <article>
+      <span>Most ordered product</span>
+      {% if most_ordered %}
+        <strong class="stat-name">{{ most_ordered.name }}</strong>
+        <p class="quiet">{{ most_ordered.units }} units ordered</p>
+      {% else %}
+        <strong class="stat-name">No orders yet</strong>
+      {% endif %}
+    </article>
+  </div>
+
+  <section class="card">
+    <header class="card-head">
+      <h2>Last 10 orders</h2>
+      <a href="{% url 'panel:orders' %}">All orders</a>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Placed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in recent_orders %}
+          <tr>
+            <td><strong>{{ order.number }}</strong></td>
+            <td>{{ order.customer.name|default:"—" }}</td>
+            <td><span class="chip chip-{{ order.status }}">{{ order.get_status_display }}</span></td>
+            <td>{{ order.created_at|date:"M j, Y H:i" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="quiet">No orders yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+{% endblock %}

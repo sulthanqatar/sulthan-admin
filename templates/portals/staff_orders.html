@@ -1,0 +1,52 @@
+{% extends "portals/base.html" %}
+{% block title %}Orders{% endblock %}
+{% block heading %}Orders{% endblock %}
+{% block content %}
+  <p class="lede">New orders can be marked accepted or packed. No other status changes are available here.</p>
+  <div class="stat-row">
+    <article><span>New</span><strong>{{ new_count }}</strong></article>
+    <article><span>Accepted</span><strong>{{ accepted_count }}</strong></article>
+    <article><span>Packed</span><strong>{{ packed_count }}</strong></article>
+  </div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td><strong>{{ order.id }}</strong></td>
+            <td>{{ order.customer }}<br><span class="quiet">{{ order.area }}</span></td>
+            <td>{{ order.items }}</td>
+            <td>{{ order.location }}</td>
+            <td><span class="chip chip-{{ order.status }}">{% if order.status == "new" %}New{% elif order.status == "accepted" %}Accepted{% elif order.status == "packed" %}Packed{% elif order.status == "delivered" %}Delivered{% else %}Not delivered{% endif %}</span></td>
+            <td class="actions">
+              {% if order.status == "new" or order.status == "accepted" %}
+                {% if order.status == "new" %}
+                  <form method="post" action="{% url 'staff_order_status' order.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+                  </form>
+                {% endif %}
+                <form method="post" action="{% url 'staff_order_status' order.id %}">
+                  {% csrf_token %}
+                  <button class="btn btn-secondary" name="status" value="packed" type="submit">Mark packed</button>
+                </form>
+              {% else %}
+                <span class="quiet">No staff update</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

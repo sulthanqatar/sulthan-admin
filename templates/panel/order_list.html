@@ -1,0 +1,59 @@
+{% extends "panel/base.html" %}
+{% block title %}Orders{% endblock %}
+{% block heading %}Orders{% endblock %}
+{% block content %}
+  <p class="lede">Accept or cancel new orders. Packed and delivery updates stay with staff and delivery.</p>
+  <div class="stat-row">
+    <article>
+      <span>Overall orders</span>
+      <strong>{{ order_count }}</strong>
+    </article>
+  </div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Status</th>
+          <th>Placed</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td><strong>{{ order.number }}</strong></td>
+            <td>{{ order.customer.name|default:"—" }}</td>
+            <td>
+              {% for line in order.lines.all %}
+                {{ line.product.name }} × {{ line.quantity }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                —
+              {% endfor %}
+            </td>
+            <td><span class="chip chip-{{ order.status }}">{{ order.get_status_display }}</span></td>
+            <td>{{ order.created_at|date:"M j, Y H:i" }}</td>
+            <td class="actions">
+              {% if order.status == "new" %}
+                <form method="post" action="{% url 'panel:order_status' order.pk %}">
+                  {% csrf_token %}
+                  <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+                </form>
+                <form method="post" action="{% url 'panel:order_status' order.pk %}">
+                  {% csrf_token %}
+                  <button class="btn btn-danger" name="status" value="cancelled" type="submit">Cancel</button>
+                </form>
+              {% else %}
+                <span class="quiet">No further change</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="quiet">No orders yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

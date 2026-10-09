@@ -37,7 +37,7 @@
   }
 
   function collectCommands() {
-    const items = [{ title: "Overview", href: qs(".sidebar-home")?.getAttribute("href") || "/admin/" }];
+    const items = [{ title: "Overview", href: qs(".sidebar-home")?.getAttribute("href") || "/superadmin/" }];
     qsa("#nav-sidebar th[scope=row] a").forEach((link) => {
       items.push({ title: link.textContent.trim(), href: link.getAttribute("href") });
     });

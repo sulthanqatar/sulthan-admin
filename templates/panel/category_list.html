@@ -1,0 +1,44 @@
+{% extends "panel/base.html" %}
+{% block title %}Categories{% endblock %}
+{% block heading %}Categories{% endblock %}
+{% block content %}
+  <div class="page-actions">
+    <a class="btn btn-primary" href="{% url 'panel:category_new' %}">Add category</a>
+  </div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Products</th>
+          <th>Status</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+          <tr>
+            <td><strong>{{ category.name }}</strong></td>
+            <td>{{ category.product_count }}</td>
+            <td>
+              {% if category.is_active %}
+                <span class="chip chip-active">Active</span>
+              {% else %}
+                <span class="chip chip-inactive">Inactive</span>
+              {% endif %}
+            </td>
+            <td class="actions">
+              <a class="btn" href="{% url 'panel:category_edit' category.pk %}">Edit</a>
+              <form method="post" action="{% url 'panel:category_delete' category.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="quiet">No categories yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

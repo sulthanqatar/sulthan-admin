@@ -1,0 +1,47 @@
+{% extends "panel/base.html" %}
+{% block title %}B2B reviews{% endblock %}
+{% block heading %}B2B reviews{% endblock %}
+{% block content %}
+  <p class="lede">Review new business registrations. Accept adds them to the B2B customer count.</p>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in registrations %}
+          <tr>
+            <td><strong>{{ item.company }}</strong></td>
+            <td>{{ item.contact_name }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.phone|default:"—" }}</td>
+            <td><span class="chip chip-{{ item.status }}">{{ item.get_status_display }}</span></td>
+            <td class="actions">
+              {% if item.status == "pending" %}
+                <form method="post" action="{% url 'panel:b2b_status' item.pk %}">
+                  {% csrf_token %}
+                  <button class="btn btn-primary" name="status" value="accepted" type="submit">Accept</button>
+                </form>
+                <form method="post" action="{% url 'panel:b2b_status' item.pk %}">
+                  {% csrf_token %}
+                  <button class="btn btn-danger" name="status" value="cancelled" type="submit">Cancel</button>
+                </form>
+              {% else %}
+                <span class="quiet">Reviewed</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="quiet">No B2B registrations yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

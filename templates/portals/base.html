@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ portal.title }}{% endblock %} | Sulthan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=3">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/{{ role }}/">
+        <span class="brand-mark">S</span>
+        <span>
+          <strong>Sulthan</strong>
+          <small>{{ portal.title }}</small>
+        </span>
+      </a>
+      <nav>
+        {% if role == "staff" %}
+          <a href="{% url 'staff_orders' %}" class="{% if section == 'orders' %}is-active{% endif %}">Orders</a>
+          <a href="{% url 'staff_products' %}" class="{% if section == 'products' %}is-active{% endif %}">Products</a>
+        {% elif role == "warehouse" %}
+          <a href="{% url 'warehouse_home' %}" class="is-active">Locations</a>
+        {% else %}
+          <a href="{% url 'delivery_home' %}" class="is-active">Deliveries</a>
+        {% endif %}
+      </nav>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="kicker">{{ portal.kicker }}</p>
+          <h1>{% block heading %}{{ portal.title }}{% endblock %}</h1>
+        </div>
+        <div class="topbar-user">
+          <span class="avatar">{{ username|slice:":2"|upper }}</span>
+          <span>{{ username }}</span>
+          <form method="post" action="/{{ role }}/logout/">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost">Log out</button>
+          </form>
+        </div>
+      </header>
+      <main>
+        {% if messages %}
+          <ul class="toasts">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+</body>
+</html>

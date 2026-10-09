@@ -1,0 +1,50 @@
+{% extends "portals/base.html" %}
+{% block title %}Locations{% endblock %}
+{% block heading %}Locations{% endblock %}
+{% block content %}
+  <p class="lede">On-hand quantities at each warehouse and storage location.</p>
+  <div class="stat-row">
+    <article><span>Locations</span><strong>{{ location_count }}</strong></article>
+    <article><span>Units on hand</span><strong>{{ unit_count }}</strong></article>
+  </div>
+  {% for location in locations %}
+    <section class="card location-card">
+      <header class="card-head">
+        <div>
+          <p class="kicker">{{ location.kind }}</p>
+          <h2>{{ location.name }}</h2>
+          <p class="quiet">{{ location.address }}</p>
+        </div>
+        <span class="chip chip-accepted">{{ location.units }} units</span>
+      </header>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Product</th>
+            <th>On hand</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in location.lines %}
+            <tr>
+              <td>{{ line.product.sku }}</td>
+              <td><strong>{{ line.product.name }}</strong></td>
+              <td>{{ line.qty }}</td>
+              <td>
+                <form class="inline-form" method="post" action="{% url 'warehouse_stock' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="location_id" value="{{ location.id }}">
+                  <input type="hidden" name="product_id" value="{{ line.product_id }}">
+                  <input name="qty" type="number" min="0" value="{{ line.qty }}" aria-label="Quantity of {{ line.product.name }} at {{ location.name }}">
+                  <button class="btn btn-primary" type="submit">Save</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "portals/base.html" %}
+{% block title %}Deliveries{% endblock %}
+{% block heading %}Deliveries{% endblock %}
+{% block content %}
+  <p class="lede">Packed orders waiting to go out. Mark each one delivered or not delivered.</p>
+  <div class="stat-row">
+    <article><span>Ready to deliver</span><strong>{{ incoming|length }}</strong></article>
+    <article><span>Closed</span><strong>{{ settled|length }}</strong></article>
+  </div>
+  <div class="card">
+    <header class="card-head"><h2>New orders</h2></header>
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Drop-off</th>
+          <th>Items</th>
+          <th>From</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in incoming %}
+          <tr>
+            <td><strong>{{ order.id }}</strong><br><span class="chip chip-packed">Packed</span></td>
+            <td>{{ order.customer }}</td>
+            <td>{{ order.area }}</td>
+            <td>{{ order.items }}</td>
+            <td>{{ order.location }}</td>
+            <td class="actions">
+              <form method="post" action="{% url 'delivery_status' order.id %}">
+                {% csrf_token %}
+                <button class="btn btn-primary" name="status" value="delivered" type="submit">Delivered</button>
+              </form>
+              <form method="post" action="{% url 'delivery_status' order.id %}">
+                {% csrf_token %}
+                <button class="btn btn-danger" name="status" value="not_delivered" type="submit">Not delivered</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="quiet">No packed orders are waiting.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if settled %}
+    <div class="card">
+      <header class="card-head"><h2>Already updated</h2></header>
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Drop-off</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in settled %}
+            <tr>
+              <td><strong>{{ order.id }}</strong></td>
+              <td>{{ order.customer }}</td>
+              <td>{{ order.area }}</td>
+              <td><span class="chip chip-{{ order.status }}">{% if order.status == "delivered" %}Delivered{% else %}Not delivered{% endif %}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

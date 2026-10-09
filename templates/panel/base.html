@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ heading }}{% endblock %} | Sulthan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{% static 'portals/portal.css' %}?v=3">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="{% url 'panel:dashboard' %}">
+        <span class="brand-mark">S</span>
+        <span>
+          <strong>Sulthan</strong>
+          <small>Admin</small>
+        </span>
+      </a>
+      <nav>
+        <a href="{% url 'panel:dashboard' %}" class="{% if section == 'dashboard' %}is-active{% endif %}">Dashboard</a>
+        <a href="{% url 'panel:categories' %}" class="{% if section == 'categories' %}is-active{% endif %}">Categories</a>
+        <a href="{% url 'panel:products' %}" class="{% if section == 'products' %}is-active{% endif %}">Products</a>
+        <a href="{% url 'panel:orders' %}" class="{% if section == 'orders' %}is-active{% endif %}">Orders</a>
+        <a href="{% url 'panel:customers' %}" class="{% if section == 'customers' %}is-active{% endif %}">Customers</a>
+        <a href="{% url 'panel:users' %}" class="{% if section == 'users' %}is-active{% endif %}">Users</a>
+        <a href="{% url 'panel:b2b' %}" class="{% if section == 'b2b' %}is-active{% endif %}">B2B reviews</a>
+        <a href="{% url 'panel:banners' %}" class="{% if section == 'banners' %}is-active{% endif %}">Banners</a>
+        <a href="{% url 'panel:coupons' %}" class="{% if section == 'coupons' %}is-active{% endif %}">Coupons</a>
+        <a href="{% url 'panel:audit' %}" class="{% if section == 'audit' %}is-active{% endif %}">Audit trail</a>
+      </nav>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="kicker">Admin</p>
+          <h1>{% block heading %}{{ heading }}{% endblock %}</h1>
+        </div>
+        <div class="topbar-user">
+          <span class="avatar">{{ panel_username|slice:":2"|upper }}</span>
+          <span>{{ panel_username }}</span>
+          <form method="post" action="{% url 'panel:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-ghost">Log out</button>
+          </form>
+        </div>
+      </header>
+      <main>
+        {% if messages %}
+          <ul class="toasts">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+</body>
+</html>

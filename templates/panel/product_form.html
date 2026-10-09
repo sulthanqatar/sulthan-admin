@@ -1,0 +1,33 @@
+{% extends "panel/base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block heading %}{{ heading }}{% endblock %}
+{% block content %}
+  <form class="card form-card" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    {% endfor %}
+    <label for="images">Images</label>
+    <input id="images" class="field" type="file" name="images" accept="image/*" multiple>
+    <p class="quiet">Select one or more images. They are added to this product.</p>
+    {% if product and product.images.all %}
+      <div class="thumb-row">
+        {% for image in product.images.all %}
+          <div class="thumb">
+            <img src="{{ image.image.url }}" alt="{{ image.alt }}">
+            <label>
+              <input type="checkbox" name="delete_image" value="{{ image.pk }}">
+              Remove
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a class="btn" href="{% url 'panel:products' %}">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

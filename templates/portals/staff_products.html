@@ -1,0 +1,34 @@
+{% extends "portals/base.html" %}
+{% block title %}Products{% endblock %}
+{% block heading %}Products{% endblock %}
+{% block content %}
+  <p class="lede">Update the sellable stock for each product.</p>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Product</th>
+          <th>Stock</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td>{{ product.sku }}</td>
+            <td><strong>{{ product.name }}</strong></td>
+            <td>{{ product.stock }}</td>
+            <td>
+              <form class="inline-form" method="post" action="{% url 'staff_stock' product.id %}">
+                {% csrf_token %}
+                <input name="stock" type="number" min="0" value="{{ product.stock }}" aria-label="Stock for {{ product.name }}">
+                <button class="btn btn-primary" type="submit">Save</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

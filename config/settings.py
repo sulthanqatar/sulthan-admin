@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'panel',
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'panel.context.panel_user',
             ],
         },
     },
@@ -160,6 +162,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # Vercel runs collectstatic when this is set and serves the result from its CDN.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = 'media/'
+# Uploaded product and banner images. Vercel can only write under /tmp.
+MEDIA_ROOT = Path('/tmp/sulthan-media') if ON_VERCEL else BASE_DIR / 'media'
 
 
 # Email
